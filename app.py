@@ -1,12 +1,13 @@
 from dash import Dash, html, dcc, html, callback, Input, Output
-
+from pages import dashboard
+from lib import navBar
 import plotly.express as px
 import pandas as pd
 
 app = Dash(__name__, suppress_callback_exceptions=True,
                 meta_tags=[{'name': 'viewport',
                             'content': 'width=device-width, initial-scale=1.0'}]
-                )
+)
 
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
@@ -26,20 +27,20 @@ df2 = pd.DataFrame({
 
 fig2 = px.bar(df2, x="Fruit", y="Amount", color="City", barmode="group")
 
+CONTENT_STYLE = {
+    "marginLeft": "18rem",
+    "marginRight": "2rem",
+    "padding": "2rem 1rem",
+}
+
 app.layout = html.Div(children=[
     # represents the browser address bar and doesn't render anything
     dcc.Location(id='url', refresh=False),
-    html.H1(children='Hello Dash'),
-
-    html.Div(children='''
-        Dash: A web application framework for your data.
-    '''),
-     dcc.Link('Navigate to "/fig1"', href='/fig1'),
-    html.Br(),
-    dcc.Link('Navigate to "/fig2"', href='/fig2'),
+    navBar.layout,
+    html.H1(children='Hello Dash',style=CONTENT_STYLE),
 
     # content will be rendered in this element
-    html.Div(id='page-content'),
+    html.Div(id='page-content', style=CONTENT_STYLE),
 
     
 ])
@@ -57,6 +58,9 @@ def display_page(pathname):
             id='example-graph',
             figure=fig2
         )
+    
+    if pathname == '/dashboard':
+        return dashboard.layout
 
 
 if __name__ == '__main__':
