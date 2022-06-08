@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pandas = "*"
+dash = "*"
+plotly = "*"
+gunicorn = "*"
+
+[dev-packages]
+pylint = "*"
+pipenv-to-requirements = "*"
+pre-commit = "*"
+
+[requires]
+python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
