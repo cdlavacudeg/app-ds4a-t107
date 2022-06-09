@@ -8,7 +8,6 @@ pandas = "*"
 dash = "*"
 plotly = "*"
 gunicorn = "*"
-dash-bootstrap-components = "*"
 
 [dev-packages]
 pylint = "*"

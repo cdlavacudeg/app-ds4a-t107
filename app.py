@@ -4,10 +4,17 @@ from lib import navBar
 import plotly.express as px
 import pandas as pd
 
-app = Dash(__name__, suppress_callback_exceptions=True,
-                meta_tags=[{'name': 'viewport',
-                            'content': 'width=device-width, initial-scale=1.0'}]
-)
+external_scripts=[
+    {
+        'src':"https://kit.fontawesome.com/828ca6943c.js",
+        'crossorigin':"anonymous",
+    }
+]
+app = Dash(__name__, 
+            suppress_callback_exceptions=True,
+            title="DS4A-T107",
+            external_scripts=external_scripts
+        )
 
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
@@ -41,25 +48,23 @@ app.layout = html.Div(children=[
 
     # content will be rendered in this element
     html.Div(id='page-content', style=CONTENT_STYLE),
-
-    
-])
+],className="container")
 
 @callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/fig1':
+    if pathname == '/abstract':
         return dcc.Graph(
             id='example-graph',
             figure=fig
         )
-    if pathname == '/fig2':
+    if pathname == '/analysis':
         return dcc.Graph(
             id='example-graph',
             figure=fig2
         )
     
-    if pathname == '/dashboard':
+    if pathname == '/risk-profile':
         return dashboard.layout
 
 
