@@ -1,5 +1,5 @@
 from pydoc import classname
-from dash import html, dcc,Input, Output, callback
+from dash import html, dcc,Input, Output, State, callback
 
 logo = html.Div(
     [   
@@ -15,19 +15,19 @@ ulNav = html.Ul([
         dcc.Link([
             html.I(className="fa-solid fa-file-waveform"),
             html.Span("Abstract",className="links_name")
-        ],href="/abstract")
+        ],href="/abstract",id="abstract")
     ]),
     html.Li([
         dcc.Link([
             html.I(className="fa-solid fa-chart-pie"),
             html.Span("Analysis",className="links_name")
-        ],href="/analysis")
+        ],href="/analysis",id="analysis")
     ]),
     html.Li([
         dcc.Link([
             html.I(className="fa-solid fa-circle-exclamation"),
             html.Span("Risk profile",className="links_name")
-        ],href="/risk-profile")
+        ],href="/risk-profile",id="risk")
     ])
 ],className="nav_list")
 
@@ -39,5 +39,19 @@ layout = html.Div(
         ulNav
     ],
     className="sidebar",
+    id="sidebar-id"
 )
 
+
+@callback(
+    Output("sidebar-id", "className"),
+    Output("container-id","className"),    
+    Input("btn", "n_clicks"),
+    State("sidebar-id", "className"),
+    prevent_initial_call=True,
+)
+def callback(n_clicks, current_classes):
+    print(n_clicks,current_classes)
+    if "active" in current_classes:
+        return "sidebar","container"
+    return ("sidebar" + " active","container"+" active")

@@ -34,38 +34,39 @@ df2 = pd.DataFrame({
 
 fig2 = px.bar(df2, x="Fruit", y="Amount", color="City", barmode="group")
 
-CONTENT_STYLE = {
-    "marginLeft": "18rem",
-    "marginRight": "2rem",
-    "padding": "2rem 1rem",
-}
 
 app.layout = html.Div(children=[
     # represents the browser address bar and doesn't render anything
     dcc.Location(id='url', refresh=False),
     navBar.layout,
-    html.H1(children='Hello Dash',style=CONTENT_STYLE),
+    html.Div(id='page-content'),
+],className="container",
+    id="container-id"
+)
 
-    # content will be rendered in this element
-    html.Div(id='page-content', style=CONTENT_STYLE),
-],className="container")
-
-@callback(Output('page-content', 'children'),
-              [Input('url', 'pathname')])
+@callback(
+    Output('page-content', 'children'),
+    Output('abstract','className'),
+    Output('analysis','className'),
+    Output('risk','className'),
+    Input('url', 'pathname')
+)
 def display_page(pathname):
     if pathname == '/abstract':
-        return dcc.Graph(
+        return (dcc.Graph(
             id='example-graph',
             figure=fig
+        ),"active","",""
         )
     if pathname == '/analysis':
-        return dcc.Graph(
+        return (dcc.Graph(
             id='example-graph',
             figure=fig2
+        ),"","active",""
         )
     
     if pathname == '/risk-profile':
-        return dashboard.layout
+        return (dashboard.layout,"","","active")
 
 
 if __name__ == '__main__':
