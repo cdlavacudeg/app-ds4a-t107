@@ -11,7 +11,7 @@ repos:
       hooks:
         # - id: pylint
         #   name: pylint
-        #   entry: pipenv run pylint app/
+        #   entry: pipenv run pylint .
         #   language: system
         #   always_run: true
         #   pass_filenames: false

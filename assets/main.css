@@ -188,7 +188,7 @@ select{
 .container.active{
     display: grid;
     width: 100%;
-    grid-template-columns: 248px minmax(320px,1fr);
+    grid-template-columns: 240px minmax(320px,1fr);
     padding: 0;
     margin: 0;
 }
@@ -196,6 +196,43 @@ select{
 
 #page-content{
     grid-column-start: 2;
+}
+
+.header-app{
+  text-align:center;
+  background-color:hsl(var(--clr-back-blue));
+  grid-column-start:2;
+  font-size:5rem;
+  font-weight:500;
+  line-height:3rem;
+  padding-block:15px
+}
+
+.header-app span{
+  font-size:2.5rem;
+}
+.content-container{
+  display:grid;
+  grid-template-areas:
+    'principal principal'
+    'secondary tertiary';
+  gap:15px;
+  margin-block:15px;
+  margin-inline:15px;
+}
+
+@media (max-width:768px){
+  .content-container{
+    grid-template-areas:
+      'principal'
+      'secondary'
+      'tertiary';
+  }
+}
+.card{
+  background-color:hsl(var(--clr-back-blue));
+  width:100%;
+  height:300px;
 }
 
 /* NavBar */
@@ -328,4 +365,18 @@ select{
 
 .sidebar ul li a:hover i{
     background-color: hsl( var(--clr-dark )/0.2);
+}
+
+/* Abstract Page */
+
+#map-abstract{
+  grid-area:principal;
+}
+
+#fig1-abstract{
+  grid-area:secondary;
+}
+
+#fig2-abstract{
+  grid-are:tertiary;
 }
