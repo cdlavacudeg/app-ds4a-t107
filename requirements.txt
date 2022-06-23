@@ -11,6 +11,10 @@
 ################################################################################
 
 dash
+folium
 gunicorn
+matplotlib
+numpy
 pandas
 plotly
+seaborn

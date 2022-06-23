@@ -8,6 +8,10 @@ pandas = "*"
 dash = "*"
 plotly = "*"
 gunicorn = "*"
+numpy = "*"
+folium = "*"
+seaborn = "*"
+matplotlib = "*"
 
 [dev-packages]
 pylint = "*"
