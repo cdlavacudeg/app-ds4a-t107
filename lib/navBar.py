@@ -13,7 +13,7 @@ ulNav = html.Ul(
                 dcc.Link(
                     [
                         html.I(className="fa-solid fa-file-waveform"),
-                        html.Span("Abstract", className="links_name"),
+                        html.Span("Maps", className="links_name"),
                     ],
                     href="/",
                     id="abstract",
@@ -21,7 +21,7 @@ ulNav = html.Ul(
             ]
         ),
         html.Li(
-            [
+            [ # 2 selectores, normalizado, 
                 dcc.Link(
                     [
                         html.I(className="fa-solid fa-chart-pie"),
@@ -33,7 +33,7 @@ ulNav = html.Ul(
             ]
         ),
         html.Li(
-            [
+            [   # 4 Selectores , edad , genero(MF), Departamento -> Municipio, 
                 dcc.Link(
                     [
                         html.I(className="fa-solid fa-circle-exclamation"),
