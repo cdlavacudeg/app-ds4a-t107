@@ -64,7 +64,6 @@ layout = html.Div(
     prevent_initial_call=True,
 )
 def callback(n_clicks, current_classes):
-    print(n_clicks, current_classes)
     if "active" in current_classes:
         return "sidebar", "container"
     return ("sidebar active", "container active")

@@ -1,21 +1,37 @@
 from dash import html, dcc, Input, Output, callback
 
-selectors = dcc.Slider(
-    2016,
-    2022,
-    0,
-    marks={
-        2016: "2016",
-        2017: "2017",
-        2018: "2018",
-        2019: "2019",
-        2020: "2020",
-        2021: "2021",
-        2022: "2022",
-    },
-    value=2016,
-    id="year-slider",
+selectorNormalized = html.Div(
+    [
+        html.Div(
+            [
+                html.H3("Normalized"),
+                dcc.Dropdown(
+                    options=[
+                        {"label": "Yes", "value": True},
+                        {"label": "No", "value": False},
+                    ],
+                    value=True,
+                    id="normalized-dropdown",
+                ),
+            ],
+            className="selector-container"
+        ),
+        html.Div(
+            [
+                html.H3("Select figure"),
+                dcc.Dropdown(
+                    options=["Suicides", "Violence", "Suicides attemps"],
+                    value="Suicides",
+                    id="figure-dropdown",
+                ),
+            ],
+            className="selector-container"
+        ),
+    ],
+    id="selectors-analysis",
 )
+
+
 figures = html.Div(
     [
         html.H2("Suicides map for year"),
@@ -27,7 +43,7 @@ figures = html.Div(
         ),
     ],
     className="card",
-    id="map-abstract",
+    id="figure-analysis",
 )
 
-layout = [selectors,figures]
+layout = [selectorNormalized, figures]

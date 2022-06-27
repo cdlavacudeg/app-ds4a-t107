@@ -235,6 +235,9 @@ select {
 .header-app span {
   font-size: 2.5rem;
 }
+
+/* Content container*/
+
 .content-container {
   display: grid;
   grid-template-areas:
@@ -244,6 +247,18 @@ select {
   margin-block: 15px;
   margin-inline: 15px;
 }
+.content-container.analysis {
+  grid-template-areas:
+    "principal"
+    "secondary"
+    "secondary";
+}
+
+.content-container.risk-profile {
+  grid-template-areas:
+    "principal secondary"
+    "principal secondary";
+}
 
 @media (max-width: 768px) {
   .content-container {
@@ -252,24 +267,11 @@ select {
       "secondary"
       "tertiary";
   }
-}
-.card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  align-content: center;
-  background-color: hsl(var(--clr-back-blue));
-  width: 100%;
-  height: auto;
-}
-#year-slider {
-  width: 50%;
-  min-width:320px;
-  margin-block: 15px;
-}
-
-#year-slider span {
-  font-size: 1.6rem;
+  .content-container.risk-profile {
+    grid-template-areas:
+      "principal"
+      "secondary";
+  }
 }
 
 /* NavBar */
@@ -404,7 +406,7 @@ select {
   background-color: hsl(var(--clr-dark) / 0.2);
 }
 
-/* Abstract Page */
+/* Map Page */
 
 #map-abstract {
   grid-area: principal;
@@ -416,4 +418,51 @@ select {
 
 #fig2-abstract {
   grid-area: tertiary;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  background-color: hsl(var(--clr-back-blue));
+  width: 100%;
+  height: auto;
+}
+
+#year-slider {
+  width: 50%;
+  min-width: 320px;
+  margin-block: 15px;
+}
+
+#year-slider span {
+  font-size: 1.6rem;
+}
+
+/* Analysis page */
+
+#selectors-analysis {
+  grid-area: principal;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#selectors-analysis .selector-container {
+  width: 48%;
+  padding: 1%;
+}
+
+#figure-analysis {
+  grid-area: secondary;
+}
+
+/* Risk profile page */
+
+#selectors-risk {
+  grid-area: principal;
+}
+
+#figure-risk {
+  grid-area: secondary;
 }
