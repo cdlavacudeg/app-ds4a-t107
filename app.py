@@ -1,5 +1,5 @@
 from dash import Dash, html, dcc, html, callback, Input, Output
-from pages import dashboard, abstract
+from pages import dashboard, map, analysis
 from lib import navBar
 import plotly.express as px
 import pandas as pd
@@ -60,16 +60,17 @@ app.layout = html.Div(
     Output("abstract", "className"),
     Output("analysis", "className"),
     Output("risk", "className"),
+    Output("page-content","className"),
     Input("url", "pathname"),
 )
 def display_page(pathname):
     if pathname == "/":
-        return (abstract.layout, "active", "", "")
+        return (map.layout, "active", "", "","content-container")
     if pathname == "/analysis":
-        return (dcc.Graph(id="example-graph", figure=fig2), "", "active", "")
+        return (analysis.layout, "", "active", "","content-container")
 
     if pathname == "/risk-profile":
-        return (dashboard.layout, "", "", "active")
+        return (dashboard.layout, "", "", "active","content-container risk-profile")
 
 
 if __name__ == "__main__":

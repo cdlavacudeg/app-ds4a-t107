@@ -1,12 +1,19 @@
-from pydoc import classname
 from dash import html, dcc, Input, Output, callback
-from utils import violencia
+from utils import violencia, suicidios, intentosS
 
 slider = dcc.Slider(
     2016,
     2022,
     0,
-    marks={2016: "2016", 2017: "2017", 2018: "2018", 2019: "2019", 2020:"2020", 2021:"2021", 2022:"2022"},
+    marks={
+        2016: "2016",
+        2017: "2017",
+        2018: "2018",
+        2019: "2019",
+        2020: "2020",
+        2021: "2021",
+        2022: "2022",
+    },
     value=2016,
     id="year-slider",
 )
@@ -63,13 +70,16 @@ layout = [principalMap, secondaryMap, tertiaryMap]
     Input("year-slider", "value"),
 )
 def callback(value):
-    mapaSuicidios = violencia.map_suicides_per_year_population(value)
+    mapaSuicidios = suicidios.map_suicides_per_year_population(value)
     mapaSuicidios.save("data/violencia/mapa_suicidios.html")
     srcPrincipal = open("data/violencia/mapa_suicidios.html", "r").read()
+
     mapaViolencia = violencia.map_violencia_per_year_population(value)
     mapaViolencia.save("data/violencia/mapa_violencia.html")
     srcSecond = open("data/violencia/mapa_violencia.html", "r").read()
-    mapaIntentos = violencia.map_trysuicides_per_year_population(value)
+
+    mapaIntentos = intentosS.map_trysuicides_per_year_population(value)
     mapaIntentos.save("data/violencia/mapa_intentos_suicidio.html")
     srcThird = open("data/violencia/mapa_intentos_suicidio.html", "r").read()
+
     return (srcPrincipal, srcSecond, srcThird)
