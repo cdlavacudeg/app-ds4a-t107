@@ -23,7 +23,7 @@ selectorNormalized = html.Div(
             [
                 html.H3("Select figure"),
                 dcc.Dropdown(
-                    options=["Suicides", "Domestic violence", "Suicides attemps"],
+                    options=["Suicides", "Domestic violence", "Suicide attemps"],
                     value="Suicides",
                     id="figure-dropdown",
                 ),
@@ -47,7 +47,7 @@ layout = [selectorNormalized, figures]
 def callback(normalized, figure):
     if figure == 'Domestic violence':
         return violencia.plot_violencia_per_dpto_year_population(normalized)
-    elif figure == 'Suicides attemps':
+    elif figure == 'Suicide attemps':
         return intentosS.plot_trysuicides_per_dpto_year_population(normalized)
     else:
         return suicidios.plot_suicides_per_dpto_year_population(normalized)
