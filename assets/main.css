@@ -427,7 +427,7 @@ select {
   align-content: center;
   background-color: hsl(var(--clr-back-blue));
   width: 100%;
-  height: auto;
+  height: 100%;
 }
 
 #year-slider {
@@ -454,8 +454,21 @@ select {
 }
 
 #figure-analysis {
+  position: relative;
   grid-area: secondary;
+  height: 950px;
+  padding-top: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
+
+#figure-analysis .js-plotly-plot{
+  display: flex;
+  justify-content: center;
+}
+
 
 /* Risk profile page */
 

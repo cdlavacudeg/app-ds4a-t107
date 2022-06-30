@@ -2,18 +2,32 @@ import pandas as pd
 import folium
 import matplotlib.pyplot as plt
 from folium.plugins import HeatMap
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
 
 def plot_suicides_per_dpto_year_population(normalized):
-    df = pd.read_csv("data/violencia/MERGED-SuicidiosPopulationGeo.csv")
+    df = pd.read_csv("data/violencia/MERGED-2016-2022-Suicidios-Geo-Pop.csv")
     df.drop(
         columns=["CODE_DPTO", "CODE_MUNICIPIO", "MUNICIPIO", "LONGITUD", "LATITUD"],
         inplace=True,
     )
-    fig, ax = plt.subplots(2, 2, figsize=(13, 8), sharex=True, sharey=True)
-    ax = ax.flatten()
-    for ii, year in enumerate([2016, 2017, 2018, 2019]):
+    years_arr = [2016, 2017, 2018, 2019, 2020, 2021]
+    fig = make_subplots(
+        rows=3,
+        cols=2,
+        shared_xaxes=True,
+        shared_yaxes=True,
+        subplot_titles=([f"Suicides in {x}" for x in years_arr]),
+        vertical_spacing=0.05,
+        horizontal_spacing=0.05,
+    )
+
+    row_fig = [1, 1, 2, 2, 3, 3]
+    column_fig = [1, 2, 1, 2, 1, 2]
+
+    for index, year in enumerate(years_arr):
         df_dpto = df[df["YEAR"] == year]
-        # group by department
         df_dpto = (
             df_dpto.groupby(["DPTO"])
             .sum()
@@ -26,10 +40,18 @@ def plot_suicides_per_dpto_year_population(normalized):
             df_dpto[COLNAMENEW] = 100000.0 * df_dpto[COLNAME] / df_dpto["POPULATION"]
             df_dpto = df_dpto.sort_values(COLNAMENEW, ascending=False).reset_index()
             COLNAME = COLNAMENEW
-        # print(df_dpto.head())
-        df_dpto.plot(
-            x="DPTO", y=COLNAME, kind="bar", title=f"Suicides, {year}", ax=ax[ii]
+        df_dpto = df_dpto.head(20)
+
+        fig.add_trace(
+            go.Bar(x=df_dpto["DPTO"], y=df_dpto[COLNAME], showlegend=False),
+            row=row_fig[index],
+            col=column_fig[index],
         )
+        fig.update_layout(
+            height=900, width=900, title_text="Suicides in Colombia", title_x=0.5
+        )
+
+    return fig
 
 
 def map_suicides_per_year_population(year):
@@ -37,6 +59,40 @@ def map_suicides_per_year_population(year):
     # df.drop(columns=["CODE_DPTO", "CODE_MUNICIPIO"], inplace=True) # NOT NEED SINCE I AM KEEPING ONLY LAT AND LONG
     df = df[df["YEAR"] == year]
     # print(df.head())
+
+
+def plot_trysuicides_per_dpto_year_population(normalized):
+    df = pd.read_csv("INPUTDATA/NEWCSV/MERGED-TrySuicidiosPopulationGeo.csv")
+    df.drop(
+        columns=["CODE_DPTO", "CODE_MUNICIPIO", "MUNICIPIO", "LONGITUD", "LATITUD"],
+        inplace=True,
+    )
+    fig, ax = plt.subplots(3, 2, figsize=(13, 12), sharex=True, sharey=True)
+    ax = ax.flatten()
+    for ii, year in enumerate([2016, 2017, 2018, 2019, 2020, 2021]):
+        df_dpto = df[df["YEAR"] == year]
+        # print(df_dpto.head())
+        # group by department
+        COLNAME = "COUNTER_TRY"
+        df_dpto = (
+            df_dpto.groupby(["DPTO"])
+            .sum()
+            .sort_values(COLNAME, ascending=False)
+            .reset_index()
+        )
+        if normalized == True:
+            COLNAMENEW = COLNAME + "_OVER_POP"
+            df_dpto[COLNAMENEW] = 100000.0 * df_dpto[COLNAME] / df_dpto["POPULATION"]
+            df_dpto = df_dpto.sort_values(COLNAMENEW, ascending=False).reset_index()
+            COLNAME = COLNAMENEW
+        # print(df_dpto.head())
+        df_dpto.plot(
+            x="DPTO",
+            y=COLNAME,
+            kind="bar",
+            title=f"Intentos Suicidios, {year}",
+            ax=ax[ii],
+        )
     # Heat map for count of begin location
     START_COORDS = [4.7110, -74.0721]
     map_aux = folium.Map(location=START_COORDS, zoom_start=5)

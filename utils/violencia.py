@@ -2,6 +2,8 @@ import pandas as pd
 import folium
 import matplotlib.pyplot as plt
 from folium.plugins import HeatMap
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 # Selector para tres opciones
 def plot_violencia_per_dpto_year_population(normalized):
@@ -10,11 +12,21 @@ def plot_violencia_per_dpto_year_population(normalized):
         columns=["CODE_DPTO", "CODE_MUNICIPIO", "MUNICIPIO", "LONGITUD", "LATITUD"],
         inplace=True,
     )
-    fig, ax = plt.subplots(3, 2, figsize=(13, 10), sharex=True, sharey=True)
-    ax = ax.flatten()
-    for ii, year in enumerate([2016, 2017, 2018, 2019, 2020, 2021]):
+    years_arr = [2016, 2017, 2018, 2019, 2020, 2021]
+    fig = make_subplots(
+        rows=3,
+        cols=2,
+        shared_xaxes=True,
+        shared_yaxes=True,
+        subplot_titles=([f"Domestic violence in {x}" for x in years_arr]),
+        vertical_spacing=0.05,
+        horizontal_spacing=0.05,
+    )
+
+    row_fig = [1, 1, 2, 2, 3, 3]
+    column_fig = [1, 2, 1, 2, 1, 2]
+    for index, year in enumerate(years_arr):
         dfvi = df[df["YEAR"] == year]
-        # group by department
         dfvi_dpto = (
             dfvi.groupby(["DPTO"])
             .sum()
@@ -29,9 +41,16 @@ def plot_violencia_per_dpto_year_population(normalized):
             )
             dfvi_dpto = dfvi_dpto.sort_values(COLNAMENEW, ascending=False).reset_index()
             COLNAME = COLNAMENEW
-        dfvi_dpto.plot(
-            x="DPTO", y=COLNAME, kind="bar", title=f"Intra-family, {year}", ax=ax[ii]
+        df_dpto = dfvi_dpto.head(20)
+        fig.add_trace(
+            go.Bar(x=df_dpto["DPTO"], y=df_dpto[COLNAME], showlegend=False),
+            row=row_fig[index],
+            col=column_fig[index],
         )
+        fig.update_layout(
+            height=900, width=900, title_text="Domestic violence Colombia", title_x=0.5
+        )
+    return fig
 
 
 def map_violencia_per_year_population(year):

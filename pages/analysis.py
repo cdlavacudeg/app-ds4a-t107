@@ -1,4 +1,7 @@
 from dash import html, dcc, Input, Output, callback
+from utils import violencia, suicidios, intentosS
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 
 selectorNormalized = html.Div(
     [
@@ -14,36 +17,37 @@ selectorNormalized = html.Div(
                     id="normalized-dropdown",
                 ),
             ],
-            className="selector-container"
+            className="selector-container",
         ),
         html.Div(
             [
                 html.H3("Select figure"),
                 dcc.Dropdown(
-                    options=["Suicides", "Violence", "Suicides attemps"],
+                    options=["Suicides", "Domestic violence", "Suicides attemps"],
                     value="Suicides",
                     id="figure-dropdown",
                 ),
             ],
-            className="selector-container"
+            className="selector-container",
         ),
     ],
     id="selectors-analysis",
 )
 
 
-figures = html.Div(
-    [
-        html.H2("Suicides map for year"),
-        html.Iframe(
-            srcDoc=open("data/violencia/mapa_suicidios.html", "r").read(),
-            width="100%",
-            height="300",
-            id="map-principal",
-        ),
-    ],
-    className="card",
-    id="figure-analysis",
-)
+figures = dcc.Graph(id="figure-analysis",className='card')
 
 layout = [selectorNormalized, figures]
+
+@callback(
+    Output("figure-analysis", "figure"),
+    Input("normalized-dropdown", "value"),
+    Input("figure-dropdown", "value"),
+)
+def callback(normalized, figure):
+    if figure == 'Domestic violence':
+        return violencia.plot_violencia_per_dpto_year_population(normalized)
+    elif figure == 'Suicides attemps':
+        return intentosS.plot_trysuicides_per_dpto_year_population(normalized)
+    else:
+        return suicidios.plot_suicides_per_dpto_year_population(normalized)
