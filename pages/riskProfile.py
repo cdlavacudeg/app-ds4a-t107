@@ -2,7 +2,7 @@ from dash import dcc, html, Input, Output, callback
 
 selectors = html.Div(
     [
-        html.H3("Normalized"),
+        html.H3("Deparment"),
         dcc.Dropdown(
             options=[
                 {"label": "Yes", "value": True},

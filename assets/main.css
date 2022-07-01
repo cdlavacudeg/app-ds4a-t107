@@ -448,6 +448,10 @@ select {
   justify-content: space-between;
   align-items: center;
 }
+#selectors-container{
+  display: flex;
+  flex-direction: column;
+}
 #selectors-analysis .selector-container {
   width: 48%;
   padding: 1%;
@@ -456,18 +460,13 @@ select {
 #figure-analysis {
   position: relative;
   grid-area: secondary;
-  height: 950px;
   padding-top: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  padding-bottom: 25px;
+  justify-content: space-around;
+  flex-direction: row;
 }
 
-#figure-analysis .js-plotly-plot{
-  display: flex;
-  justify-content: center;
-}
+
 
 
 /* Risk profile page */

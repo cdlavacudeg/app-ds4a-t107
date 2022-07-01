@@ -3,25 +3,27 @@ from utils import violencia, suicidios, intentosS
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 
+slider = dcc.Slider(
+    2016,
+    2022,
+    0,
+    marks={
+        2016: "2016",
+        2017: "2017",
+        2018: "2018",
+        2019: "2019",
+        2020: "2020",
+        2021: "2021",
+        2022: "2022",
+    },
+    value=2016,
+    id="year-slider",
+)
 selectorNormalized = html.Div(
     [
         html.Div(
             [
-                html.H3("Normalized"),
-                dcc.Dropdown(
-                    options=[
-                        {"label": "Yes", "value": True},
-                        {"label": "No", "value": False},
-                    ],
-                    value=True,
-                    id="normalized-dropdown",
-                ),
-            ],
-            className="selector-container",
-        ),
-        html.Div(
-            [
-                html.H3("Select figure"),
+                html.H3("Figure"),
                 dcc.Dropdown(
                     options=["Suicides", "Domestic violence", "Suicide attemps"],
                     value="Suicides",
@@ -30,24 +32,38 @@ selectorNormalized = html.Div(
             ],
             className="selector-container",
         ),
+        slider,
     ],
-    id="selectors-analysis",
+    id="selectors-container",
 )
 
 
-figures = dcc.Graph(id="figure-analysis",className='card')
+figures = html.Div(
+    [
+        dcc.Graph(id="figure-analysis-not-normalized"),
+        dcc.Graph(id="figure-analysis-normalized"),
+    ],
+    id="figure-analysis",className="card",
+)
 
 layout = [selectorNormalized, figures]
 
+
 @callback(
-    Output("figure-analysis", "figure"),
-    Input("normalized-dropdown", "value"),
+    Output("figure-analysis-normalized", "figure"),
+    Output("figure-analysis-not-normalized", "figure"),
     Input("figure-dropdown", "value"),
+    Input("year-slider", "value"),
 )
-def callback(normalized, figure):
-    if figure == 'Domestic violence':
-        return violencia.plot_violencia_per_dpto_year_population(normalized)
-    elif figure == 'Suicide attemps':
-        return intentosS.plot_trysuicides_per_dpto_year_population(normalized)
+def callback(figure, year):
+    if figure == "Domestic violence":
+        normalized=violencia.plot_violencia_per_dpto_year_population(True,year)
+        noNormalized=violencia.plot_violencia_per_dpto_year_population(False,year)
+    elif figure == "Suicide attemps":
+        noNormalized=intentosS.plot_trysuicides_per_dpto_year_population(False,year)
+        normalized=intentosS.plot_trysuicides_per_dpto_year_population(True,year)
     else:
-        return suicidios.plot_suicides_per_dpto_year_population(normalized)
+        noNormalized = suicidios.plot_suicides_per_dpto_year_population(False, year)
+        normalized = suicidios.plot_suicides_per_dpto_year_population(True, year)
+    return (normalized,noNormalized)
+
