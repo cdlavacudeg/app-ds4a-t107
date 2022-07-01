@@ -2,54 +2,50 @@ import pandas as pd
 import folium
 import matplotlib.pyplot as plt
 from folium.plugins import HeatMap
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
+import plotly.express as px
 
 
-def plot_trysuicides_per_dpto_year_population(normalized):
+def plot_trysuicides_per_dpto_year_population(normalized, year):
     df = pd.read_csv("data/violencia/MERGED-TrySuicidiosPopulationGeo.csv")
     df.drop(
         columns=["CODE_DPTO", "CODE_MUNICIPIO", "MUNICIPIO", "LONGITUD", "LATITUD"],
         inplace=True,
     )
-    years_arr = [2016, 2017, 2018, 2019, 2020, 2021]
-    fig = make_subplots(
-        rows=3,
-        cols=2,
-        shared_xaxes=True,
-        shared_yaxes=True,
-        subplot_titles=([f"Suicide attemps {x}" for x in years_arr]),
-        vertical_spacing=0.05,
-        horizontal_spacing=0.05,
+    df_dpto = df[df["YEAR"] == year]
+    COLNAME = "COUNTER_TRY"
+    df_dpto = (
+        df_dpto.groupby(["DPTO"])
+        .sum()
+        .sort_values(COLNAME, ascending=False)
+        .reset_index()
     )
 
-    row_fig = [1, 1, 2, 2, 3, 3]
-    column_fig = [1, 2, 1, 2, 1, 2]
+    if normalized == True:
+        COLNAMENEW = COLNAME + "_OVER_POP"
+        df_dpto[COLNAMENEW] = 100000.0 * df_dpto[COLNAME] / df_dpto["POPULATION"]
+        df_dpto = df_dpto.sort_values(COLNAMENEW, ascending=False).reset_index()
+        COLNAME = COLNAMENEW
+    df_dpto = df_dpto.head(20)
 
-    for index, year in enumerate(years_arr):
-        df_dpto = df[df["YEAR"] == year]
-        COLNAME = "COUNTER_TRY"
-        df_dpto = (
-            df_dpto.groupby(["DPTO"])
-            .sum()
-            .sort_values(COLNAME, ascending=False)
-            .reset_index()
-        )
+    fig = px.bar(
+        df_dpto,
+        x="DPTO",
+        y=COLNAME,
+        labels={
+            "DPTO": "Department",
+            "COUNTER_TRY": "Suicide attemps",
+            "COUNTER_TRY_OVER_POP": "SA per 100k habitants",
+        },
+        color="DPTO",
+        color_discrete_sequence=px.colors.sequential.haline,
+    )
+    title_aux = "normalized" if normalized else ""
+    fig.update_layout(
+        showlegend=False,
+        title_text=f"Suicide attemps in Colombia {title_aux}",
+        title_x=0.5,
+    )
 
-        if normalized == True:
-            COLNAMENEW = COLNAME + "_OVER_POP"
-            df_dpto[COLNAMENEW] = 100000.0 * df_dpto[COLNAME] / df_dpto["POPULATION"]
-            df_dpto = df_dpto.sort_values(COLNAMENEW, ascending=False).reset_index()
-            COLNAME = COLNAMENEW
-        df_dpto = df_dpto.head(20)
-        fig.add_trace(
-            go.Bar(x=df_dpto["DPTO"], y=df_dpto[COLNAME], showlegend=False),
-            row=row_fig[index],
-            col=column_fig[index],
-        )
-        fig.update_layout(
-            height=900, width=900, title_text="Suicide attemps Colombia", title_x=0.5
-        )
     return fig
 
 

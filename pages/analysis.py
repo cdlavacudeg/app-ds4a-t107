@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 
 slider = dcc.Slider(
     2016,
-    2022,
+    2021,
     0,
     marks={
         2016: "2016",
@@ -14,10 +14,10 @@ slider = dcc.Slider(
         2019: "2019",
         2020: "2020",
         2021: "2021",
-        2022: "2022",
     },
     value=2016,
     id="year-slider",
+    className="selector-container"
 )
 selectorNormalized = html.Div(
     [
@@ -34,16 +34,23 @@ selectorNormalized = html.Div(
         ),
         slider,
     ],
-    id="selectors-container",
+    id="selectors-analysis",
 )
 
 
 figures = html.Div(
     [
-        dcc.Graph(id="figure-analysis-not-normalized"),
-        dcc.Graph(id="figure-analysis-normalized"),
+        html.Div(
+            dcc.Graph(id="figure-analysis-not-normalized"),
+            className="figure-analysis-container",
+        ),
+        html.Div(
+            dcc.Graph(id="figure-analysis-normalized"),
+            className="figure-analysis-container",
+        ),
     ],
-    id="figure-analysis",className="card",
+    id="figure-analysis",
+    className="card",
 )
 
 layout = [selectorNormalized, figures]
@@ -57,13 +64,12 @@ layout = [selectorNormalized, figures]
 )
 def callback(figure, year):
     if figure == "Domestic violence":
-        normalized=violencia.plot_violencia_per_dpto_year_population(True,year)
-        noNormalized=violencia.plot_violencia_per_dpto_year_population(False,year)
+        normalized = violencia.plot_violencia_per_dpto_year_population(True, year)
+        noNormalized = violencia.plot_violencia_per_dpto_year_population(False, year)
     elif figure == "Suicide attemps":
-        noNormalized=intentosS.plot_trysuicides_per_dpto_year_population(False,year)
-        normalized=intentosS.plot_trysuicides_per_dpto_year_population(True,year)
+        noNormalized = intentosS.plot_trysuicides_per_dpto_year_population(False, year)
+        normalized = intentosS.plot_trysuicides_per_dpto_year_population(True, year)
     else:
         noNormalized = suicidios.plot_suicides_per_dpto_year_population(False, year)
         normalized = suicidios.plot_suicides_per_dpto_year_population(True, year)
-    return (normalized,noNormalized)
-
+    return (normalized, noNormalized)

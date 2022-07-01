@@ -209,6 +209,7 @@ select {
   grid-template-columns: 78px minmax(320px, 1fr);
   padding: 0;
   margin: 0;
+  transition: all 0.5s ease-in-out;
 }
 .container.active {
   display: grid;
@@ -216,10 +217,12 @@ select {
   grid-template-columns: 240px minmax(320px, 1fr);
   padding: 0;
   margin: 0;
+  transition: all 0.5s ease-in-out;
 }
 
 #page-content {
   grid-column-start: 2;
+  transition: all 0.5s ease-in-out;
 }
 
 .header-app {
@@ -246,6 +249,7 @@ select {
   gap: 15px;
   margin-block: 15px;
   margin-inline: 15px;
+  transition: all 0.5s ease-in-out;
 }
 .content-container.analysis {
   grid-template-areas:
@@ -284,7 +288,7 @@ select {
   width: 78px;
   background-color: hsl(var(--clr-back-blue));
   padding: 16px 16px;
-  transition: all 0.5s ease;
+  transition: all 0.5s ease-in-out;
 }
 .sidebar.active {
   display: block;
@@ -298,6 +302,7 @@ select {
   align-items: center;
   opacity: 0;
   pointer-events: none;
+  transition: all 0.5s ease-in-out;
 }
 .sidebar.active .logo_content .logo {
   opacity: 1;
@@ -320,6 +325,7 @@ select {
   line-height: 50px;
   cursor: pointer;
   transform: translateX(-25%);
+  transition: all 0.5s ease-in-out;
 }
 
 .sidebar.active #btn {
@@ -373,6 +379,7 @@ select {
   opacity: 0;
   display: none;
   pointer-events: none;
+  transition: all 0.5s ease-in-out;
 }
 .sidebar.active .links_name {
   opacity: 1;
@@ -448,13 +455,11 @@ select {
   justify-content: space-between;
   align-items: center;
 }
-#selectors-container{
-  display: flex;
-  flex-direction: column;
-}
+
 #selectors-analysis .selector-container {
   width: 48%;
   padding: 1%;
+  min-width: 320px;
 }
 
 #figure-analysis {
@@ -466,8 +471,31 @@ select {
   flex-direction: row;
 }
 
+.figure-analysis-container {
+  width: 48%;
+  min-width: 320px;
+}
 
+@media screen and (max-width: 1000px) {
+  #figure-analysis {
+    flex-direction: column;
+  }
+  .figure-analysis-container {
+    width: 90%;
+    margin: 1rem;
+  }
+}
 
+@media screen and (max-width: 768px) {
+  #selectors-analysis {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  #selectors-analysis .selector-container {
+    width: 98%;
+  }
+}
 
 /* Risk profile page */
 

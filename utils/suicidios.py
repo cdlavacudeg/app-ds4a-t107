@@ -5,26 +5,12 @@ from folium.plugins import HeatMap
 import plotly.express as px
 
 
-def plot_suicides_per_dpto_year_population(normalized,year):
+def plot_suicides_per_dpto_year_population(normalized, year):
     df = pd.read_csv("data/violencia/MERGED-2016-2022-Suicidios-Geo-Pop.csv")
     df.drop(
         columns=["CODE_DPTO", "CODE_MUNICIPIO", "MUNICIPIO", "LONGITUD", "LATITUD"],
         inplace=True,
     )
-    # years_arr = [2016, 2017, 2018, 2019, 2020, 2021]
-    # fig = make_subplots(
-    #     rows=3,
-    #     cols=2,
-    #     shared_xaxes=True,
-    #     shared_yaxes=True,
-    #     subplot_titles=([f"Suicides in {x}" for x in years_arr]),
-    #     vertical_spacing=0.05,
-    #     horizontal_spacing=0.05,
-    # )
-    #
-    # row_fig = [1, 1, 2, 2, 3, 3]
-    # column_fig = [1, 2, 1, 2, 1, 2]
-    #
     df_dpto = df[df["YEAR"] == year]
     df_dpto = (
         df_dpto.groupby(["DPTO"])
@@ -41,16 +27,22 @@ def plot_suicides_per_dpto_year_population(normalized,year):
 
     df_dpto = df_dpto.head(20)
 
-    # fig.add_trace(
-    #     go.Bar(x=df_dpto["DPTO"], y=df_dpto[COLNAME], showlegend=False),
-    #     row=row_fig[index],
-    #     col=column_fig[index],
-    # )
-    # fig.update_layout(
-    #     height=900, width=900, title_text="Suicides in Colombia", title_x=0.5
-    # )
-    fig = px.bar(df_dpto,x="DPTO", y=COLNAME) #color_continuous_scale=px.colors.sequential.Magma)
-
+    fig = px.bar(
+        df_dpto,
+        x="DPTO",
+        y=COLNAME,
+        labels={
+            "DPTO": "Department",
+            "SUI_COUNTER": "Number of suicides",
+            "SUI_COUNTER_OVER_POP": "Suicides per 100k habitants",
+        },
+        color="DPTO",
+        color_discrete_sequence=px.colors.sequential.haline,
+    )
+    title_aux = "normalized" if normalized else ""
+    fig.update_layout(
+        showlegend=False, title_text=f"Suicides in Colombia {title_aux}", title_x=0.5
+    )
     return fig
 
 
