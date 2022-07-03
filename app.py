@@ -16,6 +16,7 @@ app = Dash(
     title="DS4A-T107",
     external_scripts=external_scripts,
 )
+server=app.server
 
 app.layout = html.Div(
     children=[
