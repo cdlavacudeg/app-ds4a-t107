@@ -3,7 +3,7 @@ import folium
 import matplotlib.pyplot as plt
 from folium.plugins import HeatMap
 import plotly.express as px
-
+from utils import api
 
 def plot_trysuicides_per_dpto_year_population(normalized, year):
     df = pd.read_csv("data/violencia/MERGED-TrySuicidiosPopulationGeo.csv")
@@ -50,18 +50,27 @@ def plot_trysuicides_per_dpto_year_population(normalized, year):
 
 
 def map_trysuicides_per_year_population(year):
-    df = pd.read_csv("data/violencia/MERGED-TrySuicidiosPopulationGeo.csv")
-    # df.drop(columns=["CODE_DPTO", "CODE_MUNICIPIO"], inplace=True) # NOT NEED SINCE I AM KEEPING ONLY LAT AND LONG
-    df = df[df["YEAR"] == year]
-    # print(df.head())
+    df = api.suicidesAttempsApi(year)
     # Heat map for count of begin location
     START_COORDS = [4.7110, -74.0721]
     map_aux = folium.Map(location=START_COORDS, zoom_start=5)
     # Create and clean the heat dataframe
-    heat_df = df[["LATITUD", "LONGITUD"]].dropna()
+    df["cases_norm"] = 100000 * df["suicide_attempts"] / df["population"]
+    df.drop(
+        columns=[
+            "suicide_attempts",
+            "population",
+            "municipality_name",
+            "municipality_code",
+            "department_name",
+            "department_code",
+        ],
+        inplace=True,
+    )
+    heat_df = df[["latitude", "longitude","cases_norm"]].dropna()
     # Create the list of lists
     heat_df = [
-        [row["LATITUD"], row["LONGITUD"]] for index, row in heat_df.iterrows()
+        [row["latitude"], row["longitude"],row["cases_norm"]] for index, row in heat_df.iterrows()
     ]  # THIS IS SLOW!
     # Add the data to the map and plot
     HeatMap(heat_df, radius=10, blur=15, control=True).add_to(map_aux)

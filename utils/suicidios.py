@@ -1,27 +1,27 @@
 import pandas as pd
 import folium
-import matplotlib.pyplot as plt
 from folium.plugins import HeatMap
 import plotly.express as px
+from utils import api
 
 
 def plot_suicides_per_dpto_year_population(normalized, year):
-    df = pd.read_csv("data/violencia/MERGED-2016-2022-Suicidios-Geo-Pop.csv")
+    df = api.suicideApi(year)
     df.drop(
-        columns=["CODE_DPTO", "CODE_MUNICIPIO", "MUNICIPIO", "LONGITUD", "LATITUD"],
+        columns=["longitude", "latitude", "municipality_name", "municipality_code"],
         inplace=True,
     )
-    df_dpto = df[df["YEAR"] == year]
+
     df_dpto = (
-        df_dpto.groupby(["DPTO"])
+        df.groupby(["department_name"])
         .sum()
-        .sort_values("SUI_COUNTER", ascending=False)
+        .sort_values("suicides", ascending=False)
         .reset_index()
     )
-    COLNAME = "SUI_COUNTER"
+    COLNAME = "suicides"
     if normalized == True:
         COLNAMENEW = COLNAME + "_OVER_POP"
-        df_dpto[COLNAMENEW] = 100000.0 * df_dpto[COLNAME] / df_dpto["POPULATION"]
+        df_dpto[COLNAMENEW] = 100000.0 * df_dpto[COLNAME] / df_dpto["population"]
         df_dpto = df_dpto.sort_values(COLNAMENEW, ascending=False).reset_index()
         COLNAME = COLNAMENEW
 
@@ -29,14 +29,14 @@ def plot_suicides_per_dpto_year_population(normalized, year):
 
     fig = px.bar(
         df_dpto,
-        x="DPTO",
+        x="department_name",
         y=COLNAME,
         labels={
-            "DPTO": "Department",
-            "SUI_COUNTER": "Number of suicides",
-            "SUI_COUNTER_OVER_POP": "Suicides per 100k habitants",
+            "department_name": "Department",
+            "suicides": "Number of suicides",
+            "suicides_OVER_POP": "Suicides per 100k habitants",
         },
-        color="DPTO",
+        color="department_name",
         color_discrete_sequence=px.colors.sequential.haline,
     )
     title_aux = "normalized" if normalized else ""
@@ -47,18 +47,35 @@ def plot_suicides_per_dpto_year_population(normalized, year):
 
 
 def map_suicides_per_year_population(year):
-    df = pd.read_csv("data/violencia/MERGED-2016-2022-Suicidios-Geo-Pop.csv")
-    # df.drop(columns=["CODE_DPTO", "CODE_MUNICIPIO"], inplace=True) # NOT NEED SINCE I AM KEEPING ONLY LAT AND LONG
-    df = df[df["YEAR"] == year]
-    # print(df.head())
+    df = api.suicideApi(year)
     START_COORDS = [4.7110, -74.0721]
     map_aux = folium.Map(location=START_COORDS, zoom_start=5)
     # Create and clean the heat dataframe
-    heat_df = df[["LATITUD", "LONGITUD"]].dropna()
-    # Create the list of lists
+    df["cases_norm"] = 100000 * df["suicides"] / df["population"]
+    df.drop(
+        columns=[
+            "suicides",
+            "population",
+            "municipality_name",
+            "municipality_code",
+            "department_name",
+            "department_code",
+        ],
+        inplace=True,
+    )
+    heat_df = df[["latitude", "longitude", "cases_norm"]].dropna()
+    maxvalue = heat_df["cases_norm"].max()
+    minvalue = heat_df["cases_norm"].min()
+
     heat_df = [
-        [row["LATITUD"], row["LONGITUD"]] for index, row in heat_df.iterrows()
+        [
+            row["latitude"],
+            row["longitude"],
+            (row["cases_norm"] - minvalue) / (maxvalue - minvalue),
+        ]
+        for index, row in heat_df.iterrows()
     ]  # THIS IS SLOW!
-    # Add the data to the map and plot
+
+        # Add the data to the map and plot
     HeatMap(heat_df, radius=10, blur=15, control=True).add_to(map_aux)
     return map_aux

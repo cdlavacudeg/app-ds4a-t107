@@ -7,7 +7,6 @@ from utils import api
 # Selector para tres opciones
 def plot_violencia_per_dpto_year_population(normalized, year):
     df = api.violenceApi(year)
-    print(df.head(5))
     df.drop(
         columns=["code", "longitude", "latitude"],
         inplace=True,
@@ -50,16 +49,25 @@ def plot_violencia_per_dpto_year_population(normalized, year):
 
 def map_violencia_per_year_population(year):
     df = api.violenceApi(year)
-    df.drop(columns=["code"], inplace=True)
     df["cases_norm"] = 100000 * df["violence_cases"] / df["population"]
-    df.drop(columns=["violence_cases", "population", "name"], inplace=True)
+    df.drop(
+        columns=[
+            "violence_cases",
+            "population",
+            "municipality_name",
+            "municipality_code",
+            "department_name",
+            "department_code"
+        ],
+        inplace=True,
+    )
     # Heat map for count of begin location
     START_COORDS = [4.7110, -74.0721]
     map_violencia = folium.Map(location=START_COORDS, zoom_start=5)
     # Create and clean the heat dataframe
-    heat_df = df[["latitude", "longitude"]].dropna()
+    heat_df = df[["latitude", "longitude", "cases_norm"]].dropna()
     # Create the list of lists
-    heat_df = [[row["latitude"], row["longitude"]] for index, row in heat_df.iterrows()]
+    heat_df = [[row["latitude"], row["longitude"], row["cases_norm"]] for index, row in heat_df.iterrows()]
     # Add the data to the map and plot
     HeatMap(heat_df, radius=10, blur=15, control=True).add_to(map_violencia)
     return map_violencia
