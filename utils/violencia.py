@@ -8,12 +8,11 @@ from utils import api
 def plot_violencia_per_dpto_year_population(normalized, year):
     df = api.violenceApi(year)
     df.drop(
-        columns=["code", "longitude", "latitude"],
+        columns=["longitude", "latitude","municipality_name","municipality_code"],
         inplace=True,
     )
-    dfvi = df
     dfvi_dpto = (
-        dfvi.groupby(["name"])
+        df.groupby(["department_name"])
         .sum()
         .sort_values("violence_cases", ascending=False)
         .reset_index()
@@ -27,14 +26,14 @@ def plot_violencia_per_dpto_year_population(normalized, year):
     df_dpto = dfvi_dpto.head(20)
     fig = px.bar(
         df_dpto,
-        x="name",
+        x="department_name",
         y=COLNAME,
         labels={
-            "name": "Municipality",
+            "department_name": "Department",
             "violence_cases": "Domestic violence count",
             "violence_casesOVER_POP": "DV per 100k habitants",
         },
-        color="name",
+        color="department_name",
         color_discrete_sequence=px.colors.sequential.haline,
     )
     title_aux = "normalized" if normalized else ""

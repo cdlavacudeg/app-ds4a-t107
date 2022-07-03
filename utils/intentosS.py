@@ -6,15 +6,14 @@ import plotly.express as px
 from utils import api
 
 def plot_trysuicides_per_dpto_year_population(normalized, year):
-    df = pd.read_csv("data/violencia/MERGED-TrySuicidiosPopulationGeo.csv")
+    df = api.suicidesAttempsApi(year)
     df.drop(
-        columns=["CODE_DPTO", "CODE_MUNICIPIO", "MUNICIPIO", "LONGITUD", "LATITUD"],
+        columns=["longitude", "latitude", "municipality_name", "municipality_code"],
         inplace=True,
     )
-    df_dpto = df[df["YEAR"] == year]
-    COLNAME = "COUNTER_TRY"
+    COLNAME = "suicide_attempts"
     df_dpto = (
-        df_dpto.groupby(["DPTO"])
+        df.groupby(["department_name"])
         .sum()
         .sort_values(COLNAME, ascending=False)
         .reset_index()
@@ -22,21 +21,21 @@ def plot_trysuicides_per_dpto_year_population(normalized, year):
 
     if normalized == True:
         COLNAMENEW = COLNAME + "_OVER_POP"
-        df_dpto[COLNAMENEW] = 100000.0 * df_dpto[COLNAME] / df_dpto["POPULATION"]
+        df_dpto[COLNAMENEW] = 100000.0 * df_dpto[COLNAME] / df_dpto["population"]
         df_dpto = df_dpto.sort_values(COLNAMENEW, ascending=False).reset_index()
         COLNAME = COLNAMENEW
     df_dpto = df_dpto.head(20)
 
     fig = px.bar(
         df_dpto,
-        x="DPTO",
+        x="department_name",
         y=COLNAME,
         labels={
-            "DPTO": "Department",
-            "COUNTER_TRY": "Suicide attemps",
-            "COUNTER_TRY_OVER_POP": "SA per 100k habitants",
+            "department_name": "Department",
+            "suicide_attempts": "Suicide attemps",
+            "suicide_attempts_OVER_POP": "SA per 100k habitants",
         },
-        color="DPTO",
+        color="department_name",
         color_discrete_sequence=px.colors.sequential.haline,
     )
     title_aux = "normalized" if normalized else ""
