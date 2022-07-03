@@ -17,4 +17,6 @@ matplotlib
 numpy
 pandas
 plotly
+python-dotenv
+requests
 seaborn

@@ -23,7 +23,7 @@ selectorNormalized = html.Div(
     [
         html.Div(
             [
-                html.H3("Figure"),
+                html.H3("Variable"),
                 dcc.Dropdown(
                     options=["Suicides", "Domestic violence", "Suicide attemps"],
                     value="Suicides",

@@ -12,6 +12,8 @@ numpy = "*"
 folium = "*"
 seaborn = "*"
 matplotlib = "*"
+python-dotenv = "*"
+requests = "*"
 
 [dev-packages]
 pylint = "*"
