@@ -21,7 +21,7 @@ principalMap = html.Div(
     [
         html.H2("Suicides map for year"),
         html.Iframe(
-            srcDoc=open("data/violencia/mapa_suicidios.html", "r").read(),
+            srcDoc=open("maps/mapa_suicidios.html", "r").read(),
             width="100%",
             height="300",
             id="map-principal",
@@ -36,7 +36,7 @@ secondaryMap = html.Div(
     [
         html.H2("Violence map for year"),
         html.Iframe(
-            srcDoc=open("data/violencia/mapa_violencia.html", "r").read(),
+            srcDoc=open("maps/mapa_violencia.html", "r").read(),
             width="100%",
             height="300",
             id="map-secondary",
@@ -50,7 +50,7 @@ tertiaryMap = html.Div(
     [
         html.H2("Suicide attempts  map for year"),
         html.Iframe(
-            srcDoc=open("data/violencia/mapa_intentos_suicidio.html", "r").read(),
+            srcDoc=open("maps/mapa_intentos_suicidio.html", "r").read(),
             width="100%",
             height="300",
             id="map-tertiary",
@@ -71,15 +71,15 @@ layout = [principalMap, secondaryMap, tertiaryMap]
 )
 def callback(value):
     mapaSuicidios = suicidios.map_suicides_per_year_population(value)
-    mapaSuicidios.save("data/violencia/mapa_suicidios.html")
-    srcPrincipal = open("data/violencia/mapa_suicidios.html", "r").read()
+    mapaSuicidios.save("maps/mapa_suicidios.html")
+    srcPrincipal = open("maps/mapa_suicidios.html", "r").read()
 
     mapaViolencia = violencia.map_violencia_per_year_population(value)
-    mapaViolencia.save("data/violencia/mapa_violencia.html")
-    srcSecond = open("data/violencia/mapa_violencia.html", "r").read()
+    mapaViolencia.save("maps/mapa_violencia.html")
+    srcSecond = open("maps/mapa_violencia.html", "r").read()
 
     mapaIntentos = intentosS.map_trysuicides_per_year_population(value)
-    mapaIntentos.save("data/violencia/mapa_intentos_suicidio.html")
-    srcThird = open("data/violencia/mapa_intentos_suicidio.html", "r").read()
+    mapaIntentos.save("maps/mapa_intentos_suicidio.html")
+    srcThird = open("maps/mapa_intentos_suicidio.html", "r").read()
 
     return (srcPrincipal, srcSecond, srcThird)

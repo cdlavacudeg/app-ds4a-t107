@@ -24,7 +24,7 @@ figures = html.Div(
     [
         html.H2("Suicides map for year"),
         html.Iframe(
-            srcDoc=open("data/violencia/mapa_suicidios.html", "r").read(),
+            srcDoc=open("maps/mapa_suicidios.html", "r").read(),
             width="100%",
             height="300",
             id="map-principal",
