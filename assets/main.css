@@ -231,11 +231,12 @@ select {
   grid-column-start: 2;
   font-size: 5rem;
   font-weight: 500;
-  line-height: 3rem;
+  line-height: 4.1rem;
   padding-block: 15px;
 }
 
 .header-app span {
+  margin-top: 2px;
   font-size: 2.5rem;
 }
 
@@ -260,8 +261,8 @@ select {
 
 .content-container.risk-profile {
   grid-template-areas:
-    "principal secondary secondary"
-    "principal secondary secondary";
+    "principal secondary"
+    "principal secondary";
 }
 
 @media (max-width: 768px) {
@@ -500,9 +501,25 @@ select {
 /* Risk profile page */
 
 #selectors-risk {
+  width: 100%;
+  min-width: 320px;
   grid-area: principal;
 }
 
 #figure-risk {
   grid-area: secondary;
+  /*width: 100%;
+  min-width: 320px;*/
+  justify-content: center;
 }
+
+#figure-risk h2{
+  font-size: 5rem;
+  padding-top: 15px;
+}
+
+/* .gauge-container{ */
+/*   position: relative; */
+/*   width: 100%; */
+/*   aspect-ratio: 1.56; */
+/* } */

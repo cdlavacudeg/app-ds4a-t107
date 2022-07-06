@@ -29,7 +29,7 @@ app.layout = html.Div(
         # Header
         html.H1(
             [
-                "Using data science to prevent suicides",
+                "Preventing suicides with data science",
                 html.Br(),
                 html.Span("Team 107"),
             ],

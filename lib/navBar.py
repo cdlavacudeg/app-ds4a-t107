@@ -13,7 +13,7 @@ ulNav = html.Ul(
             [
                 dcc.Link(
                     [
-                        html.I(className="fa-solid fa-file-waveform"),
+                        html.I(className="fa-solid fa-map"),
                         html.Span("Maps", className="links_name"),
                     ],
                     href="/",
