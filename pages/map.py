@@ -1,6 +1,8 @@
+# Home page of maps
 from dash import html, dcc, Input, Output, callback
 from utils import violencia, suicidios, intentosS
 
+# Slider of the years
 slider = dcc.Slider(
     2016,
     2022,
@@ -17,6 +19,8 @@ slider = dcc.Slider(
     value=2016,
     id="year-slider",
 )
+
+# Principal Map of suicides in Colombia
 principalMap = html.Div(
     [
         html.H2("Suicides map for year"),
@@ -32,6 +36,7 @@ principalMap = html.Div(
     id="map-abstract",
 )
 
+# Map of Domestic Violence
 secondaryMap = html.Div(
     [
         html.H2("Violence map for year"),
@@ -46,6 +51,7 @@ secondaryMap = html.Div(
     id="map-secondary",
 )
 
+# Map of Suicide Attempts
 tertiaryMap = html.Div(
     [
         html.H2("Suicide attempts  map for year"),
@@ -60,9 +66,11 @@ tertiaryMap = html.Div(
     id="fig2-abstract",
 )
 
+# Layout to be displayed
 layout = [principalMap, secondaryMap, tertiaryMap]
 
 
+# Callback that control all the maps to be rendered
 @callback(
     Output("map-principal", "srcDoc"),
     Output("map-secondary", "srcDoc"),

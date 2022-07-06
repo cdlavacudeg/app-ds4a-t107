@@ -1,11 +1,12 @@
-from pydoc import classname
 from dash import html, dcc, Input, Output, State, callback
 
+# Logo DS4A in the Navbar
 logo = html.Div(
     [html.Div([html.Div("DS4A", className="logo_name")], className="logo")],
     className="logo_content",
 )
 
+# List of links of the Navbar, it use icons from FontAwesome (ClassName)
 ulNav = html.Ul(
     [
         html.Li(
@@ -21,7 +22,7 @@ ulNav = html.Ul(
             ]
         ),
         html.Li(
-            [ # 2 selectores, normalizado, 
+            [
                 dcc.Link(
                     [
                         html.I(className="fa-solid fa-chart-pie"),
@@ -33,7 +34,7 @@ ulNav = html.Ul(
             ]
         ),
         html.Li(
-            [   # 4 Selectores , edad , genero(MF), Departamento -> Municipio, 
+            [
                 dcc.Link(
                     [
                         html.I(className="fa-solid fa-circle-exclamation"),
@@ -48,14 +49,14 @@ ulNav = html.Ul(
     className="nav_list",
 )
 
-
+# Return the layout that app.py is goin to render
 layout = html.Div(
     [logo, html.I(className="fa-solid fa-bars", id="btn"), ulNav],
     className="sidebar",
     id="sidebar-id",
 )
 
-
+# Callback that control the active link style
 @callback(
     Output("sidebar-id", "className"),
     Output("container-id", "className"),

@@ -1,2 +1,5 @@
 **data
 **.env
+*.pyc
+.DS_Store
+

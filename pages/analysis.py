@@ -1,8 +1,10 @@
+# Analysis page
 from dash import html, dcc, Input, Output, callback
 from utils import violencia, suicidios, intentosS
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 
+# Slider of years
 slider = dcc.Slider(
     2016,
     2021,
@@ -19,6 +21,8 @@ slider = dcc.Slider(
     id="year-slider",
     className="selector-container"
 )
+
+# Selector container of slider and dropdown that controls the figure to be rendered
 selectorNormalized = html.Div(
     [
         html.Div(
@@ -37,7 +41,7 @@ selectorNormalized = html.Div(
     id="selectors-analysis",
 )
 
-
+# Containers of the figures Normalized and not Normalized
 figures = html.Div(
     [
         html.Div(
@@ -53,9 +57,10 @@ figures = html.Div(
     className="card",
 )
 
+# Layout to be displayed
 layout = [selectorNormalized, figures]
 
-
+# Callback that control the figure displayed
 @callback(
     Output("figure-analysis-normalized", "figure"),
     Output("figure-analysis-not-normalized", "figure"),
