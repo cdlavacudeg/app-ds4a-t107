@@ -260,8 +260,8 @@ select {
 
 .content-container.risk-profile {
   grid-template-areas:
-    "principal secondary"
-    "principal secondary";
+    "principal secondary secondary"
+    "principal secondary secondary";
 }
 
 @media (max-width: 768px) {

@@ -36,3 +36,25 @@ def suicidesAttempsApi(year):
     res = req.get(f"{baseUrl}/suicide_attempts", params={"year": year})
     df = pd.DataFrame(res.json()["data"])
     return df
+
+
+def listDepartments():
+    """
+    Get all the departments of Colombia
+    """
+    res = req.get(f"{baseUrl}/departments")
+    array = res.json()["data"]  # [{"code": int , "name": string}]
+    options = [
+        {"label": x["name"], "value": x["code"]} for x in array
+    ]  # [{"label":string; "value":int}]
+    return options
+
+
+def listMunicipalities(deparment_id):
+    """
+    Get all the municipalities of a especific deparment
+    """
+    res = req.get(f"{baseUrl}/municipalities", params={"department_id": deparment_id})
+    array = res.json()["data"]  # [{"code": int , "name": string, "lat": float, "lon":float}]
+    options = [{"label": x["name"], "value": x["code"]} for x in array]
+    return options
