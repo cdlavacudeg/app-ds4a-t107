@@ -55,6 +55,40 @@ def listMunicipalities(deparment_id):
     Get all the municipalities of a especific deparment
     """
     res = req.get(f"{baseUrl}/municipalities", params={"department_id": deparment_id})
-    array = res.json()["data"]  # [{"code": int , "name": string, "lat": float, "lon":float}]
+    array = res.json()[
+        "data"
+    ]  # [{"code": int , "name": string, "lat": float, "lon":float}]
     options = [{"label": x["name"], "value": x["code"]} for x in array]
     return options
+
+
+def modelExecute(
+    department,
+    municipality,
+    gender,
+    age_group,
+    cause,
+    marital_status,
+    scolarship,
+    vulnerability_factor
+):
+    data = {
+        "department": department,
+        "municipality": municipality,
+        "gender": gender,
+        "age_group": age_group,
+        "cause": cause,
+        "marital_status": marital_status,
+        "scolarship": scolarship,
+        "vulnerability_factor": vulnerability_factor,
+    }
+    postData={}
+    for key in data:
+        if data[key] != None:
+            postData[key] = data[key]
+    
+
+    res = req.post(
+        "https://ei6jgctli3.execute-api.us-east-1.amazonaws.com/predict/", json=data
+    )
+    return res.json()["global"]

@@ -518,6 +518,25 @@ select {
   padding-top: 15px;
 }
 
+.btn-container{
+  display: flex;
+  height: 100px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#btn-risk{
+  padding: 10px;
+  font-weight: 800;
+  border: solid 2px hsl(var(--clr-blue));
+  color: hsl(var(--clr-blue));
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#btn-risk:hover{
+  background-color: hsl(var(--clr-back-blue));
+}
 /* .gauge-container{ */
 /*   position: relative; */
 /*   width: 100%; */

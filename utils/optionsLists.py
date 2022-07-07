@@ -1,22 +1,22 @@
 # List of options
 emotionalState = [
+    "Abuso de sustancias y alcohol",
+    "Acceso a armas de fuego",
+    "Bullying",
     "Conflicto con pareja o ex-pareja",
     "Desamor",
     "Económicas",
     "Enfermedad física o mental",
     "Escolares - educativas",
+    "Estado de gestación",
     "Jurídicas",
     "Laborales",
     "Maltrato físico - sexual - psicológico",
     "Muerte de un familiar o amigo",
-    "Suicidio de un familiar o amigo",
+    "Orientación sexual diversa",
     "Otras",
     "Sin información Razon del suicidio",
-    "Bullying",
-    "Abuso de sustancias y alcohol",
-    "Acceso a armas de fuego",
-    "Estado de gestación",
-    "Orientación sexual diversa",
+    "Suicidio de un familiar o amigo",
     "Víctima de hostigamiento",
 ]
 emotionalState.sort()
